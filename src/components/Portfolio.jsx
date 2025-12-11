@@ -1,940 +1,880 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from "react";
+// eslint-disable-next-line no-unused-vars
+import emailjs from "emailjs-com";
+import { motion } from "framer-motion";
+import {
+  Github,
+  Mail,
+  Globe,
+  Download,
+  Briefcase,
+  User,
+  Brain,
+  Smartphone,
+  X,
+  Menu,
+  Sun,
+  Moon,
+} from "lucide-react";
 
-const Portfolio = () => {
-  const [activeSection, setActiveSection] = useState('home');
-  const [isDarkMode, setIsDarkMode] = useState(true);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-  const observerRef = useRef(null);
+// --- External Components ---
+// ThemeToggle Component (Manages theme via localStorage and document.documentElement)
+const ThemeToggle = () => {
+  const [dark, setDark] = useState(() => {
+    // Initialize state from localStorage or default to false (light)
+    return localStorage.getItem("theme") === "dark";
+  });
 
   useEffect(() => {
-    const handleScroll = () => {
-      const sections = ['home', 'about', 'projects', 'skills', 'contact'];
-      const current = sections.find(section => {
-        const element = document.getElementById(section);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          return rect.top <= 100 && rect.bottom >= 100;
-        }
-        return false;
-      });
-      if (current) setActiveSection(current);
-    };
-
-    // Intersection Observer for animations
-    observerRef.current = new IntersectionObserver(
-      (entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('animate-fade-in-up');
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    window.addEventListener('scroll', handleScroll);
-    
-    // Observe all animate-on-scroll elements
-    document.querySelectorAll('.animate-on-scroll').forEach(el => {
-      observerRef.current.observe(el);
-    });
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-      }
-    };
-  }, []);
-
-  const projects = [
-    {
-      id: 1,
-      title: "Somi Store",
-      description: "AI-Powered E-commerce Platform Revolutionizing Online Shopping",
-      image: "/api/placeholder/600/400",
-      features: [
-        "AI Product Insights & Recommendations",
-        "Real-time Chat System with AI Assistant",
-        "Advanced Search & Filtering",
-        "User Authentication & Authorization",
-        "Payment Integration",
-        "Inventory Management",
-        "Order Tracking System",
-        "Admin Dashboard"
-      ],
-      techStack: ["React", "Node.js", "MongoDB", "Express", "TensorFlow.js", "Socket.io", "Stripe API"],
-      liveUrl: "#",
-      githubUrl: "#",
-      metrics: [
-        { value: "40%", label: "Increase in Conversions" },
-        { value: "2.5x", label: "Faster Response Time" },
-        { value: "99.9%", label: "Uptime" }
-      ]
-    },
-    {
-      id: 2,
-      title: "SamsanHub",
-      description: "Collaborative Development Platform for Modern Teams",
-      image: "/api/placeholder/600/400",
-      features: [
-        "Real-time Collaboration",
-        "Code Sharing & Review",
-        "Project Management",
-        "Team Communication",
-        "Version Control Integration",
-        "Documentation Tools"
-      ],
-      techStack: ["React", "TypeScript", "PostgreSQL", "GraphQL", "Redis", "Docker", "AWS"],
-      liveUrl: "#",
-      githubUrl: "#",
-      metrics: [
-        { value: "50%", label: "Faster Development" },
-        { value: "100+", label: "Active Users" },
-        { value: "4.8/5", label: "User Rating" }
-      ]
+    if (dark) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
     }
-  ];
-
-  const skills = {
-    frontend: [
-      { name: "React", level: 95 },
-      { name: "TypeScript", level: 90 },
-      { name: "JavaScript", level: 95 },
-      { name: "Tailwind CSS", level: 92 },
-      { name: "Next.js", level: 88 },
-      { name: "Redux", level: 85 },
-      { name: "GraphQL", level: 82 }
-    ],
-    backend: [
-      { name: "Node.js", level: 92 },
-      { name: "Express", level: 90 },
-      { name: "Python", level: 85 },
-      { name: "Django", level: 80 },
-      { name: "FastAPI", level: 78 },
-      { name: "REST APIs", level: 95 }
-    ],
-    database: [
-      { name: "MongoDB", level: 88 },
-      { name: "PostgreSQL", level: 85 },
-      { name: "Redis", level: 82 },
-      { name: "Firebase", level: 80 },
-      { name: "SQL", level: 87 }
-    ],
-    devops: [
-      { name: "Docker", level: 85 },
-      { name: "AWS", level: 80 },
-      { name: "CI/CD", level: 82 },
-      { name: "Git", level: 95 },
-      { name: "Linux", level: 83 },
-      { name: "Nginx", level: 78 }
-    ],
-    ai_ml: [
-      { name: "TensorFlow.js", level: 75 },
-      { name: "OpenAI API", level: 85 },
-      { name: "Machine Learning", level: 70 },
-      { name: "NLP", level: 75 },
-      { name: "Computer Vision", level: 65 }
-    ]
-  };
-
-  const testimonials = [
-    {
-      name: "Client A",
-      role: "CEO, Tech Startup",
-      content: "The AI integration in our e-commerce platform increased sales by 40%. Exceptional work!",
-      avatar: "/api/placeholder/100/100"
-    },
-    {
-      name: "Client B",
-      role: "Development Lead",
-      content: "SamsanHub transformed how our team collaborates. The real-time features are incredible.",
-      avatar: "/api/placeholder/100/100"
-    }
-  ];
-
-  const handleInputChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Handle form submission
-    console.log('Form submitted:', formData);
-  };
-
-  const SkillBar = ({ skill, level }) => (
-    <div className="mb-4">
-      <div className="flex justify-between mb-1">
-        <span className="font-medium">{skill}</span>
-        <span className="text-sm opacity-75">{level}%</span>
-      </div>
-      <div className={`h-2 rounded-full ${
-        isDarkMode ? 'bg-gray-700' : 'bg-gray-200'
-      }`}>
-        <div 
-          className="h-full rounded-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-1000 ease-out"
-          style={{ width: `${level}%` }}
-        ></div>
-      </div>
-    </div>
-  );
+  }, [dark]);
 
   return (
-    <div className={`min-h-screen transition-colors duration-300 ${
-      isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-50 text-gray-900'
-    }`}>
-      {/* Enhanced Navigation */}
-      <nav className={`fixed w-full z-50 transition-all duration-300 ${
-        isDarkMode ? 'bg-gray-900/95' : 'bg-white/95'
-      } backdrop-blur-lg border-b ${
-        isDarkMode ? 'border-gray-800' : 'border-gray-200'
-      }`}>
-        <div className="container mx-auto px-6 py-4">
-          <div className="flex justify-between items-center">
-            <div className="text-2xl font-bold bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
-              DevPortfolio
-            </div>
-            
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-8">
-              {['Home', 'About', 'Projects', 'Skills', 'Contact'].map((item) => (
-                <button
-                  key={item}
-                  onClick={() => {
-                    document.getElementById(item.toLowerCase()).scrollIntoView({ behavior: 'smooth' });
-                    setActiveSection(item.toLowerCase());
-                  }}
-                  className={`relative px-3 py-2 transition-all duration-300 ${
-                    activeSection === item.toLowerCase() 
-                      ? 'text-blue-500 font-semibold' 
-                      : 'hover:text-blue-400'
-                  }`}
-                >
-                  {item}
-                  {activeSection === item.toLowerCase() && (
-                    <div className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-500"></div>
-                  )}
-                </button>
-              ))}
-            </div>
-
-            <div className="flex items-center space-x-4">
-              {/* Theme Toggle */}
-              <button
-                onClick={() => setIsDarkMode(!isDarkMode)}
-                className={`p-2 rounded-lg transition-all duration-300 hover:scale-110 ${
-                  isDarkMode ? 'bg-gray-800 hover:bg-gray-700' : 'bg-gray-200 hover:bg-gray-300'
-                }`}
-              >
-                {isDarkMode ? '🌙' : '☀️'}
-              </button>
-              
-              {/* Mobile Menu Button */}
-              <button 
-                className="md:hidden p-2 rounded-lg transition-colors duration-300"
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-              >
-                <div className={`w-6 h-0.5 transition-all duration-300 ${
-                  isDarkMode ? 'bg-white' : 'bg-gray-900'
-                } ${isMenuOpen ? 'rotate-45 translate-y-1.5' : ''}`}></div>
-                <div className={`w-6 h-0.5 my-1.5 transition-all duration-300 ${
-                  isDarkMode ? 'bg-white' : 'bg-gray-900'
-                } ${isMenuOpen ? 'opacity-0' : ''}`}></div>
-                <div className={`w-6 h-0.5 transition-all duration-300 ${
-                  isDarkMode ? 'bg-white' : 'bg-gray-900'
-                } ${isMenuOpen ? '-rotate-45 -translate-y-1.5' : ''}`}></div>
-              </button>
-
-              <button 
-                onClick={() => document.getElementById('contact').scrollIntoView({ behavior: 'smooth' })}
-                className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 font-semibold shadow-lg"
-              >
-                Hire Me
-              </button>
-            </div>
-          </div>
-
-          {/* Mobile Menu */}
-          {isMenuOpen && (
-            <div className={`md:hidden mt-4 py-4 border-t ${
-              isDarkMode ? 'border-gray-800' : 'border-gray-200'
-            }`}>
-              {['Home', 'About', 'Projects', 'Skills', 'Contact'].map((item) => (
-                <button
-                  key={item}
-                  onClick={() => {
-                    document.getElementById(item.toLowerCase()).scrollIntoView({ behavior: 'smooth' });
-                    setIsMenuOpen(false);
-                  }}
-                  className={`block w-full text-left px-4 py-3 transition-colors duration-300 ${
-                    activeSection === item.toLowerCase()
-                      ? 'bg-blue-500 text-white'
-                      : isDarkMode
-                      ? 'hover:bg-gray-800'
-                      : 'hover:bg-gray-100'
-                  }`}
-                >
-                  {item}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-      </nav>
-
-      {/* Enhanced Hero Section */}
-      <section id="home" className="min-h-screen flex items-center pt-20 relative overflow-hidden">
-        {/* Animated Background */}
-        <div className="absolute inset-0">
-          <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-purple-500 rounded-full blur-3xl opacity-20 animate-pulse"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500 rounded-full blur-3xl opacity-20 animate-pulse delay-1000"></div>
-        </div>
-        
-        <div className="container mx-auto px-6 py-20 relative z-10">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div className="animate-on-scroll">
-              <div className="inline-block px-4 py-2 rounded-full bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-500/30 text-blue-400 mb-6">
-                🚀 Full-Stack Developer & AI Specialist
-              </div>
-              <h1 className="text-5xl lg:text-7xl font-bold mb-6 leading-tight">
-                Building The
-                <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent block">
-                  Future
-                </span>
-                With Code
-              </h1>
-              <p className={`text-xl lg:text-2xl mb-8 leading-relaxed ${
-                isDarkMode ? 'text-gray-300' : 'text-gray-600'
-              }`}>
-                Crafting intelligent web solutions that blend cutting-edge technology 
-                with exceptional user experiences. Specializing in AI integration and scalable architectures.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <button 
-                  onClick={() => document.getElementById('projects').scrollIntoView({ behavior: 'smooth' })}
-                  className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 font-semibold shadow-lg flex items-center justify-center"
-                >
-                  View My Work
-                  <span className="ml-2">→</span>
-                </button>
-                <button className={`border-2 px-8 py-4 rounded-xl transition-all duration-300 font-semibold flex items-center justify-center ${
-                  isDarkMode 
-                    ? 'border-gray-600 hover:border-gray-500 hover:bg-gray-800' 
-                    : 'border-gray-300 hover:border-gray-400 hover:bg-white'
-                }`}>
-                  📄 Download Resume
-                </button>
-              </div>
-
-              {/* Stats */}
-              <div className="grid grid-cols-3 gap-6 mt-12">
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-blue-400">50+</div>
-                  <div className={isDarkMode ? 'text-gray-400' : 'text-gray-600'}>Projects</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-purple-400">3+</div>
-                  <div className={isDarkMode ? 'text-gray-400' : 'text-gray-600'}>Years Experience</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-green-400">100%</div>
-                  <div className={isDarkMode ? 'text-gray-400' : 'text-gray-600'}>Client Satisfaction</div>
-                </div>
-              </div>
-            </div>
-            
-            <div className="relative animate-on-scroll">
-              <div className="relative">
-                {/* Main Avatar/Image */}
-                <div className={`w-96 h-96 mx-auto rounded-3xl ${
-                  isDarkMode ? 'bg-gray-800' : 'bg-white'
-                } shadow-2xl flex items-center justify-center relative overflow-hidden`}>
-                  <div className="text-8xl">💻</div>
-                  
-                  {/* Floating elements */}
-                  <div className="absolute top-8 left-8 w-16 h-16 bg-blue-500 rounded-2xl flex items-center justify-center text-white text-2xl shadow-lg">
-                    ⚡
-                  </div>
-                  <div className="absolute bottom-8 right-8 w-20 h-20 bg-purple-500 rounded-2xl flex items-center justify-center text-white text-3xl shadow-lg">
-                    🤖
-                  </div>
-                  <div className="absolute top-8 right-12 w-12 h-12 bg-green-500 rounded-2xl flex items-center justify-center text-white text-xl shadow-lg">
-                    🚀
-                  </div>
-                </div>
-                
-                {/* Background effects */}
-                <div className="absolute -top-8 -right-8 w-32 h-32 bg-purple-500 rounded-full blur-2xl opacity-30"></div>
-                <div className="absolute -bottom-8 -left-8 w-40 h-40 bg-blue-500 rounded-full blur-2xl opacity-30"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* About Section */}
-      <section id="about" className="py-20">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-16 animate-on-scroll">
-            <h2 className="text-4xl lg:text-5xl font-bold mb-6">About Me</h2>
-            <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto mb-8"></div>
-            <p className={`text-xl max-w-3xl mx-auto leading-relaxed ${
-              isDarkMode ? 'text-gray-300' : 'text-gray-600'
-            }`}>
-              Passionate full-stack developer with expertise in creating intelligent web applications. 
-              I bridge the gap between complex AI technologies and user-friendly interfaces, delivering 
-              solutions that drive real business value.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            <div className={`p-8 rounded-2xl text-center animate-on-scroll ${
-              isDarkMode ? 'bg-gray-800' : 'bg-white'
-            } shadow-xl`}>
-              <div className="text-4xl mb-4">🎯</div>
-              <h3 className="text-xl font-bold mb-4">Problem Solver</h3>
-              <p className={isDarkMode ? 'text-gray-300' : 'text-gray-600'}>
-                Transforming complex challenges into elegant, scalable solutions
-              </p>
-            </div>
-            
-            <div className={`p-8 rounded-2xl text-center animate-on-scroll ${
-              isDarkMode ? 'bg-gray-800' : 'bg-white'
-            } shadow-xl`}>
-              <div className="text-4xl mb-4">🚀</div>
-              <h3 className="text-xl font-bold mb-4">Innovator</h3>
-              <p className={isDarkMode ? 'text-gray-300' : 'text-gray-600'}>
-                Leveraging cutting-edge technologies to create future-proof applications
-              </p>
-            </div>
-            
-            <div className={`p-8 rounded-2xl text-center animate-on-scroll ${
-              isDarkMode ? 'bg-gray-800' : 'bg-white'
-            } shadow-xl`}>
-              <div className="text-4xl mb-4">🤝</div>
-              <h3 className="text-xl font-bold mb-4">Collaborator</h3>
-              <p className={isDarkMode ? 'text-gray-300' : 'text-gray-600'}>
-                Excellent communication and teamwork for successful project delivery
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Enhanced Projects Section */}
-      <section id="projects" className="py-20">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-16 animate-on-scroll">
-            <h2 className="text-4xl lg:text-5xl font-bold mb-6">Featured Projects</h2>
-            <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto mb-8"></div>
-            <p className={`text-xl max-w-3xl mx-auto ${
-              isDarkMode ? 'text-gray-400' : 'text-gray-600'
-            }`}>
-              Showcasing my expertise in full-stack development and AI integration through real-world applications
-            </p>
-          </div>
-
-          {projects.map((project, index) => (
-            <div key={project.id} className={`mb-32 scroll-mt-20 ${
-              index % 2 === 0 ? '' : 'lg:flex-row-reverse'
-            } lg:flex items-stretch gap-12 animate-on-scroll`}>
-              <div className="lg:w-1/2 mb-8 lg:mb-0">
-                <div className={`rounded-3xl overflow-hidden shadow-2xl h-full ${
-                  isDarkMode ? 'bg-gray-800' : 'bg-white'
-                } transform hover:scale-105 transition-transform duration-300`}>
-                  <div className="relative">
-                    <img 
-                      src={project.image} 
-                      alt={project.title}
-                      className="w-full h-64 object-cover"
-                    />
-                    <div className="absolute top-4 right-4">
-                      <span className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
-                        Featured
-                      </span>
-                    </div>
-                  </div>
-                  <div className="p-8">
-                    <h3 className="text-3xl font-bold mb-4">{project.title}</h3>
-                    <p className={`text-lg mb-6 ${
-                      isDarkMode ? 'text-gray-300' : 'text-gray-600'
-                    }`}>{project.description}</p>
-                    
-                    {/* Metrics */}
-                    <div className="grid grid-cols-3 gap-4 mb-6">
-                      {project.metrics.map((metric, idx) => (
-                        <div key={idx} className="text-center">
-                          <div className="text-2xl font-bold text-blue-400">{metric.value}</div>
-                          <div className={isDarkMode ? 'text-gray-400' : 'text-gray-600'}>{metric.label}</div>
-                        </div>
-                      ))}
-                    </div>
-
-                    <div className="mb-6">
-                      <h4 className="font-semibold text-lg mb-3">Key Features:</h4>
-                      <ul className={`grid gap-3 ${
-                        isDarkMode ? 'text-gray-300' : 'text-gray-600'
-                      }`}>
-                        {project.features.map((feature, idx) => (
-                          <li key={idx} className="flex items-center">
-                            <span className="w-2 h-2 bg-blue-500 rounded-full mr-3 flex-shrink-0"></span>
-                            {feature}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    <div className="flex flex-wrap gap-2 mb-6">
-                      {project.techStack.map((tech, idx) => (
-                        <span 
-                          key={idx}
-                          className={`px-4 py-2 rounded-full text-sm font-medium ${
-                            isDarkMode 
-                              ? 'bg-gray-700 text-blue-300' 
-                              : 'bg-blue-100 text-blue-700'
-                          }`}
-                        >
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
-
-                    <div className="flex space-x-4">
-                      <button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 font-semibold flex-1">
-                        Live Demo
-                      </button>
-                      <button className={`border-2 px-6 py-3 rounded-lg transition-all duration-300 font-semibold flex-1 ${
-                        isDarkMode 
-                          ? 'border-gray-600 hover:border-gray-500 hover:bg-gray-800' 
-                          : 'border-gray-300 hover:border-gray-400 hover:bg-gray-50'
-                      }`}>
-                        Source Code
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="lg:w-1/2">
-                <h3 className="text-3xl font-bold mb-8">Project Highlights</h3>
-                
-                {project.id === 1 && (
-                  <div className="space-y-6">
-                    <div className={`p-6 rounded-2xl ${
-                      isDarkMode ? 'bg-gray-800' : 'bg-white'
-                    } shadow-lg border-l-4 border-blue-500`}>
-                      <h4 className="font-semibold text-xl mb-3 flex items-center">
-                        <span className="text-2xl mr-3">🤖</span>
-                        AI Product Insights Engine
-                      </h4>
-                      <p className={isDarkMode ? 'text-gray-300' : 'text-gray-600'}>
-                        Implemented advanced machine learning algorithms using TensorFlow.js for 
-                        personalized product recommendations and real-time sales trend analysis. 
-                        The system processes user behavior to deliver intelligent insights.
-                      </p>
-                    </div>
-                    
-                    <div className={`p-6 rounded-2xl ${
-                      isDarkMode ? 'bg-gray-800' : 'bg-white'
-                    } shadow-lg border-l-4 border-green-500`}>
-                      <h4 className="font-semibold text-xl mb-3 flex items-center">
-                        <span className="text-2xl mr-3">💬</span>
-                        Real-time AI Chat System
-                      </h4>
-                      <p className={isDarkMode ? 'text-gray-300' : 'text-gray-600'}>
-                        Built a scalable chat infrastructure with Socket.io featuring AI-powered 
-                        customer support, automated responses, and real-time notifications. 
-                        Integrated sentiment analysis for improved customer experience.
-                      </p>
-                    </div>
-                    
-                    <div className={`p-6 rounded-2xl ${
-                      isDarkMode ? 'bg-gray-800' : 'bg-white'
-                    } shadow-lg border-l-4 border-purple-500`}>
-                      <h4 className="font-semibold text-xl mb-3 flex items-center">
-                        <span className="text-2xl mr-3">🛒</span>
-                        Complete E-commerce Solution
-                      </h4>
-                      <p className={isDarkMode ? 'text-gray-300' : 'text-gray-600'}>
-                        Developed a full-stack e-commerce platform with secure payment processing, 
-                        advanced inventory management, and comprehensive admin dashboard. 
-                        Features include order tracking and analytics.
-                      </p>
-                    </div>
-                  </div>
-                )}
-                
-                {project.id === 2 && (
-                  <div className="space-y-6">
-                    <div className={`p-6 rounded-2xl ${
-                      isDarkMode ? 'bg-gray-800' : 'bg-white'
-                    } shadow-lg border-l-4 border-blue-500`}>
-                      <h4 className="font-semibold text-xl mb-3 flex items-center">
-                        <span className="text-2xl mr-3">👥</span>
-                        Real-time Developer Collaboration
-                      </h4>
-                      <p className={isDarkMode ? 'text-gray-300' : 'text-gray-600'}>
-                        Created an innovative platform enabling developers to collaborate seamlessly 
-                        with real-time code sharing, live editing, and instant review features. 
-                        Supports multiple programming languages and frameworks.
-                      </p>
-                    </div>
-                    
-                    <div className={`p-6 rounded-2xl ${
-                      isDarkMode ? 'bg-gray-800' : 'bg-white'
-                    } shadow-lg border-l-4 border-green-500`}>
-                      <h4 className="font-semibold text-xl mb-3 flex items-center">
-                        <span className="text-2xl mr-3">🚀</span>
-                        Advanced Project Management
-                      </h4>
-                      <p className={isDarkMode ? 'text-gray-300' : 'text-gray-600'}>
-                        Implemented comprehensive project tracking with agile methodologies, 
-                        task management, and team communication tools. Features include 
-                        automated progress reporting and integration with popular version control systems.
-                      </p>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Enhanced Skills Section */}
-      <section id="skills" className={`py-20 ${
-        isDarkMode ? 'bg-gray-800' : 'bg-white'
-      }`}>
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-16 animate-on-scroll">
-            <h2 className="text-4xl lg:text-5xl font-bold mb-6">Technical Expertise</h2>
-            <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto mb-8"></div>
-            <p className={`text-xl max-w-3xl mx-auto ${
-              isDarkMode ? 'text-gray-400' : 'text-gray-600'
-            }`}>
-              Comprehensive skills across the full development stack with specialized focus on AI integration
-            </p>
-          </div>
-
-          <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
-            {Object.entries(skills).map(([category, skillList]) => (
-              <div key={category} className={`p-8 rounded-3xl shadow-xl animate-on-scroll ${
-                isDarkMode ? 'bg-gray-700' : 'bg-gray-50'
-              }`}>
-                <h3 className="text-2xl font-bold mb-6 capitalize flex items-center">
-                  <span className="w-3 h-3 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full mr-3"></span>
-                  {category.replace('_', ' & ')}
-                </h3>
-                <div className="space-y-4">
-                  {skillList.map((skill, index) => (
-                    <SkillBar key={index} skill={skill.name} level={skill.level} />
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials Section */}
-      <section className="py-20">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-16 animate-on-scroll">
-            <h2 className="text-4xl lg:text-5xl font-bold mb-6">Client Testimonials</h2>
-            <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto mb-8"></div>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            {testimonials.map((testimonial, index) => (
-              <div key={index} className={`p-8 rounded-3xl animate-on-scroll ${
-                isDarkMode ? 'bg-gray-800' : 'bg-white'
-              } shadow-xl`}>
-                <div className="flex items-center mb-6">
-                  <img 
-                    src={testimonial.avatar} 
-                    alt={testimonial.name}
-                    className="w-16 h-16 rounded-full mr-4"
-                  />
-                  <div>
-                    <div className="font-semibold text-lg">{testimonial.name}</div>
-                    <div className={isDarkMode ? 'text-gray-400' : 'text-gray-600'}>
-                      {testimonial.role}
-                    </div>
-                  </div>
-                </div>
-                <p className={`text-lg italic ${
-                  isDarkMode ? 'text-gray-300' : 'text-gray-600'
-                }`}>
-                  "{testimonial.content}"
-                </p>
-                <div className="flex text-yellow-400 mt-4">
-                  {"★".repeat(5)}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Enhanced Contact Section */}
-      <section id="contact" className="py-20">
-        <div className="container mx-auto px-6">
-          <div className="text-center mb-16 animate-on-scroll">
-            <h2 className="text-4xl lg:text-5xl font-bold mb-6">Let's Work Together</h2>
-            <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto mb-8"></div>
-            <p className={`text-xl max-w-3xl mx-auto ${
-              isDarkMode ? 'text-gray-400' : 'text-gray-600'
-            }`}>
-              Ready to bring your next project to life with cutting-edge technology and innovative solutions
-            </p>
-          </div>
-
-          <div className="max-w-6xl mx-auto">
-            <div className="grid lg:grid-cols-2 gap-16">
-              <div className="animate-on-scroll">
-                <h3 className="text-3xl font-bold mb-8">Get In Touch</h3>
-                
-                <div className="space-y-6 mb-8">
-                  <div className="flex items-center space-x-6 p-6 rounded-2xl bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/20">
-                    <div className={`w-16 h-16 rounded-2xl flex items-center justify-center text-2xl ${
-                      isDarkMode ? 'bg-gray-700' : 'bg-blue-100'
-                    }`}>
-                      📧
-                    </div>
-                    <div>
-                      <p className="font-semibold text-lg">Email</p>
-                      <p className={isDarkMode ? 'text-gray-400' : 'text-gray-600'}>
-                        your.email@domain.com
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center space-x-6 p-6 rounded-2xl bg-gradient-to-r from-green-500/10 to-blue-500/10 border border-green-500/20">
-                    <div className={`w-16 h-16 rounded-2xl flex items-center justify-center text-2xl ${
-                      isDarkMode ? 'bg-gray-700' : 'bg-green-100'
-                    }`}>
-                      💼
-                    </div>
-                    <div>
-                      <p className="font-semibold text-lg">Freelance</p>
-                      <p className={isDarkMode ? 'text-gray-400' : 'text-gray-600'}>
-                        Available for new projects
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center space-x-6 p-6 rounded-2xl bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/20">
-                    <div className={`w-16 h-16 rounded-2xl flex items-center justify-center text-2xl ${
-                      isDarkMode ? 'bg-gray-700' : 'bg-purple-100'
-                    }`}>
-                      🌍
-                    </div>
-                    <div>
-                      <p className="font-semibold text-lg">Location</p>
-                      <p className={isDarkMode ? 'text-gray-400' : 'text-gray-600'}>
-                        Remote - Worldwide
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className={`p-6 rounded-2xl ${
-                  isDarkMode ? 'bg-gray-800' : 'bg-gray-50'
-                }`}>
-                  <h4 className="font-semibold text-lg mb-4">Why Work With Me?</h4>
-                  <ul className={`space-y-3 ${
-                    isDarkMode ? 'text-gray-300' : 'text-gray-600'
-                  }`}>
-                    <li className="flex items-center">
-                      <span className="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
-                      Clean, maintainable code with best practices
-                    </li>
-                    <li className="flex items-center">
-                      <span className="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
-                      AI-powered solutions for competitive advantage
-                    </li>
-                    <li className="flex items-center">
-                      <span className="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
-                      Responsive communication and regular updates
-                    </li>
-                    <li className="flex items-center">
-                      <span className="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
-                      On-time delivery with quality assurance
-                    </li>
-                  </ul>
-                </div>
-              </div>
-
-              <div className={`p-8 rounded-3xl shadow-2xl animate-on-scroll ${
-                isDarkMode ? 'bg-gray-800' : 'bg-white'
-              }`}>
-                <form className="space-y-6" onSubmit={handleSubmit}>
-                  <div>
-                    <label className="block text-sm font-medium mb-3">Full Name</label>
-                    <input 
-                      type="text" 
-                      name="name"
-                      value={formData.name}
-                      onChange={handleInputChange}
-                      className={`w-full px-4 py-4 rounded-xl border-2 transition-all duration-300 ${
-                        isDarkMode 
-                          ? 'bg-gray-700 border-gray-600 text-white focus:border-blue-500' 
-                          : 'bg-white border-gray-300 focus:border-blue-500'
-                      } focus:outline-none focus:ring-2 focus:ring-blue-500/20`}
-                      placeholder="Enter your full name"
-                      required
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium mb-3">Email Address</label>
-                    <input 
-                      type="email" 
-                      name="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      className={`w-full px-4 py-4 rounded-xl border-2 transition-all duration-300 ${
-                        isDarkMode 
-                          ? 'bg-gray-700 border-gray-600 text-white focus:border-blue-500' 
-                          : 'bg-white border-gray-300 focus:border-blue-500'
-                      } focus:outline-none focus:ring-2 focus:ring-blue-500/20`}
-                      placeholder="your.email@domain.com"
-                      required
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium mb-3">Project Details</label>
-                    <textarea 
-                      rows={5}
-                      name="message"
-                      value={formData.message}
-                      onChange={handleInputChange}
-                      className={`w-full px-4 py-4 rounded-xl border-2 transition-all duration-300 ${
-                        isDarkMode 
-                          ? 'bg-gray-700 border-gray-600 text-white focus:border-blue-500' 
-                          : 'bg-white border-gray-300 focus:border-blue-500'
-                      } focus:outline-none focus:ring-2 focus:ring-blue-500/20`}
-                      placeholder="Tell me about your project, timeline, and budget..."
-                      required
-                    ></textarea>
-                  </div>
-                  
-                  <button 
-                    type="submit"
-                    className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 font-semibold text-lg shadow-lg"
-                  >
-                    Send Message
-                  </button>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Enhanced Footer */}
-      <footer className={`py-12 border-t ${
-        isDarkMode ? 'border-gray-800 bg-gray-900' : 'border-gray-200 bg-white'
-      }`}>
-        <div className="container mx-auto px-6">
-          <div className="grid md:grid-cols-4 gap-8 mb-8">
-            <div>
-              <div className="text-2xl font-bold bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent mb-4">
-                DevPortfolio
-              </div>
-              <p className={isDarkMode ? 'text-gray-400' : 'text-gray-600'}>
-                Building the future with code, one project at a time.
-              </p>
-            </div>
-            
-            <div>
-              <h4 className="font-semibold mb-4">Quick Links</h4>
-              <div className="space-y-2">
-                {['Home', 'Projects', 'Skills', 'Contact'].map((item) => (
-                  <button
-                    key={item}
-                    onClick={() => document.getElementById(item.toLowerCase()).scrollIntoView({ behavior: 'smooth' })}
-                    className={`block text-left transition-colors duration-300 ${
-                      isDarkMode ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'
-                    }`}
-                  >
-                    {item}
-                  </button>
-                ))}
-              </div>
-            </div>
-            
-            <div>
-              <h4 className="font-semibold mb-4">Connect</h4>
-              <div className="space-y-2">
-                {['GitHub', 'LinkedIn', 'Twitter', 'Email'].map((platform) => (
-                  <a
-                    key={platform}
-                    href="#"
-                    className={`block transition-colors duration-300 ${
-                      isDarkMode ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'
-                    }`}
-                  >
-                    {platform}
-                  </a>
-                ))}
-              </div>
-            </div>
-            
-            <div>
-              <h4 className="font-semibold mb-4">Services</h4>
-              <div className="space-y-2">
-                {['Web Development', 'AI Integration', 'E-commerce', 'Consulting'].map((service) => (
-                  <span
-                    key={service}
-                    className={`block transition-colors duration-300 ${
-                      isDarkMode ? 'text-gray-400' : 'text-gray-600'
-                    }`}
-                  >
-                    {service}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
-          
-          <div className={`pt-8 border-t text-center ${
-            isDarkMode ? 'border-gray-800 text-gray-400' : 'border-gray-200 text-gray-600'
-          }`}>
-            <p>
-              © 2024 Your Name. All rights reserved. Built with React & Tailwind CSS
-            </p>
-          </div>
-        </div>
-      </footer>
-
-      {/* Custom CSS for animations */}
-      <style jsx>{`
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        .animate-fade-in-up {
-          animation: fadeInUp 0.6s ease-out forwards;
-        }
-        .animate-on-scroll {
-          opacity: 0;
-        }
-      `}</style>
-    </div>
+    <button
+      onClick={() => setDark(!dark)}
+      className="p-2 transition-colors rounded-full bg-slate-200 text-slate-800 dark:bg-slate-700 dark:text-white hover:bg-slate-300 dark:hover:bg-slate-600"
+      aria-label="Toggle theme"
+    >
+      {dark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+    </button>
   );
 };
 
-export default Portfolio;
+// ProjectCard component (Only requires data via props)
+const ProjectCard = ({
+  title,
+  subtitle,
+  bullets = [],
+  img,
+  tags = [],
+  actions = [],
+}) => (
+  <motion.article
+    initial={{ opacity: 0, y: 8 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.35 }}
+    className="flex flex-col p-6 bg-white border shadow dark:bg-slate-800 dark:border-slate-700 rounded-2xl"
+  >
+    <div className="flex flex-col items-start gap-4 sm:flex-row">
+      <div className="flex-1 w-full">
+        <h3 className="text-lg font-semibold">{title}</h3>
+        <p className="mt-1 text-sm text-slate-500 dark:text-slate-300">
+          {subtitle}
+        </p>
+        <ul className="mt-3 ml-5 space-y-1 text-sm list-disc text-slate-600 dark:text-slate-300">
+          {bullets.map((b, i) => (
+            <li key={i}>{b}</li>
+          ))}
+        </ul>
+        <div className="flex flex-wrap gap-2 mt-4">
+          {tags.map((t, i) => (
+            <span
+              key={i}
+              className="px-2 py-1 text-xs rounded-full bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200"
+            >
+              {t}
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <div className="flex flex-wrap gap-3 mt-4">
+      {actions.map((a, i) => (
+        <a
+          key={i}
+          href={a.href}
+          target="_blank"
+          rel="noreferrer"
+          className="px-3 py-2 text-sm transition bg-transparent border rounded-md dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700"
+        >
+          {a.label}
+        </a>
+      ))}
+    </div>
+  </motion.article>
+);
+
+// MobileMenu component (Requires state and handlers via props)
+const MobileMenu = ({ active, closeMenu, navItems, setActive }) => (
+  <motion.div
+    initial={{ opacity: 0, x: "100%" }}
+    animate={{ opacity: 1, x: 0 }}
+    exit={{ opacity: 0, x: "100%" }}
+    transition={{ duration: 0.3 }}
+    className="fixed inset-0 z-50 p-6 overflow-y-auto bg-slate-50 dark:bg-slate-900 md:hidden"
+  >
+    <div className="flex items-center justify-between pb-6 border-b dark:border-slate-700">
+      <div className="text-xl font-bold">Navigation</div>
+      <button
+        onClick={closeMenu}
+        className="p-2 transition rounded-full hover:bg-slate-200 dark:hover:bg-slate-700"
+      >
+        <X className="w-6 h-6" />
+      </button>
+    </div>
+
+    <nav className="flex flex-col gap-2 mt-6">
+      {navItems.map((item) => (
+        <button
+          key={item.section}
+          onClick={() => {
+            setActive(item.section);
+            closeMenu();
+          }}
+          className={`flex items-center gap-3 p-3 rounded-xl text-lg font-medium text-left transition ${
+            active === item.section
+              ? "bg-amber-100 dark:bg-amber-900/50 text-amber-600 dark:text-amber-300"
+              : "hover:bg-slate-100 dark:hover:bg-slate-800"
+          }`}
+        >
+          <item.icon className="w-5 h-5" />
+          {item.label}
+        </button>
+      ))}
+    </nav>
+
+    <div className="pt-6 mt-8 border-t dark:border-slate-700">
+      <h3 className="mb-3 font-semibold">Settings & Actions</h3>
+      <div className="flex flex-col gap-3">
+        {/* Integrated ThemeToggle here */}
+        <div className="flex items-center justify-between p-3 transition border rounded-xl dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800">
+          <span className="text-lg font-medium">Toggle Theme</span>
+          <ThemeToggle />
+        </div>
+
+        <a
+          href="#contact"
+          onClick={closeMenu}
+          className="flex items-center justify-center gap-3 p-3 text-lg font-medium text-white transition rounded-xl bg-amber-500 hover:bg-amber-600"
+        >
+          Hire me
+        </a>
+      </div>
+    </div>
+  </motion.div>
+);
+
+// A polished, single-file React portfolio component. Built with Tailwind classes and Framer Motion.
+export default function Portfolio() {
+  // --- State and Handlers (Must be inside the component) ---
+  const [active, setActive] = useState("home"); // home, projects, about, contact, menu
+
+const closeMenu = () => setActive(prev => (prev === "menu" ? "home" : prev));
+
+  //modal pop up
+  const [modal, setModal] = useState({
+    open: false,
+    type: "success", // success | error
+    message: "",
+  });
+
+  //contact form set up
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
+
+  //handle input change
+  const updateForm = (e) =>
+    setForm({ ...form, [e.target.name]: e.target.value });
+
+  //emailjs send message
+  const sendMessage = async () => {
+  const formElement = document.getElementById("contactForm");
+
+  if (!form.name || !form.email || !form.subject || !form.message) {
+    setModal({
+      open: true,
+      type: "error",
+      message: "Please fill in all fields.",
+    });
+    return;
+  }
+
+  try {
+    await emailjs.sendForm(
+      "service_00ob5gy",
+      "template_43a2v48",
+      formElement,
+      "upIOKRCIyKLUApGIc"
+    );
+
+    setModal({
+      open: true,
+      type: "success",
+      message: "Your message and file have been sent!",
+    });
+
+    // Clear state
+    setForm({
+      name: "",
+      email: "",
+      subject: "",
+      message: "",
+    });
+
+    // Clear file input
+    document.getElementById("fileInput").value = "";
+  } catch (error) {
+    console.log(error);
+
+    setModal({
+      open: true,
+      type: "error",
+      message: "Failed to send message. Try again.",
+    });
+  }
+};
+
+
+  // --- Data Definitions ---
+  const navItems = [
+    { label: "Home", section: "home", icon: User },
+    { label: "Work", section: "projects", icon: Briefcase },
+    { label: "About", section: "about", icon: Brain },
+    { label: "Contact", section: "contact", icon: Smartphone },
+  ];
+
+  const projects = [
+    {
+      title: "Somi Store — Full eCommerce Platform",
+      subtitle:
+        "React + Laravel | Admin Dashboard | Payments | Chat Support | AI Insights",
+      bullets: [
+        "Product management (image URL + file upload), categories & subcategories",
+        "Admin dashboard with refresh trigger and order management",
+        "Custom support chat with admin sidebar and message persistence",
+        "AI Insight menu for merchants & customers",
+      ],
+      tags: ["React", "Laravel", "MySQL", "AI"],
+      img: "https://placehold.co/1200x800/22c55e/ffffff?text=E-Commerce+Demo",
+      actions: [
+        { label: "Live Demo", href: "https://somistore.com.ng/" },
+      ],
+    },
+    {
+      title: "SamsanHub — AI Insight Platform",
+      subtitle: "AI-driven insights, content generation, and API integrations",
+      bullets: [
+        "Built reusable AI insight components and server-side integrations",
+        "Role-based access control and secure Laravel APIs",
+        "Polished responsive UI using React and Tailwind",
+      ],
+      tags: ["HTML", "PHP", "APIs"],
+      img: "https://placehold.co/1200x800/eab308/ffffff?text=AI+Insights+Demo",
+      actions: [{ label: "Live Demo", href: "https://samsanhub.com/" }],
+    },
+    {
+      title: "Chat & Messaging System",
+      subtitle: "Real-time chat integrated into admin dashboard",
+      bullets: [
+        "Sidebar message interface for admin to respond to customers",
+        "Messages persist in DB and email fallback option",
+        "Access to contact page retained for deactivated users",
+      ],
+      tags: ["Socket/Realtime", "UX"],
+      img: "https://placehold.co/1200x800/0ea5e9/ffffff?text=Chat+System+Demo",
+    },
+  ];
+
+  const testimonials = [
+    {
+      quote:
+        "Kelvin built a complex eCommerce platform with an admin dashboard and support chat — fast, clean code and great communication.",
+      author: "Client — Somi Store (internal)",
+    },
+    {
+      quote:
+        "Delivered AI insight features that improved decision-making for merchants.",
+      author: "Partner — SamsanHub (internal)",
+    },
+  ];
+
+  return (
+    <div>
+      {/* The ThemeToggle now controls the 'dark' class on the HTML tag, making the theme global */}
+      <div className="min-h-screen transition-colors bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100">
+        {/* Mobile Menu Overlay */}
+        {active === "menu" && (
+          <MobileMenu
+            active={active}
+            closeMenu={closeMenu}
+            navItems={navItems}
+            setActive={setActive}
+          />
+        )}
+
+        {/* Header - Fixed to top for better UX */}
+        <header className="sticky top-0 z-40 flex items-center justify-between max-w-6xl p-4 mx-auto border-b sm:p-6 bg-slate-50/95 dark:bg-slate-900/95 backdrop-blur-sm dark:border-slate-700">
+          <div className="flex items-center gap-4">
+            <div className="flex items-center justify-center w-10 h-10 text-lg font-bold text-white rounded-lg bg-gradient-to-br from-rose-400 to-amber-400 sm:w-12 sm:h-12">
+              KW
+            </div>
+            <div>
+              <div className="text-sm font-semibold">Kelvin Williams</div>
+              <div className="hidden text-xs text-slate-500 dark:text-slate-300 sm:block">
+                Full‑Stack Developer • React / Laravel • AI & eCommerce
+              </div>
+              <div className="text-xs text-slate-500 dark:text-slate-300 sm:hidden">
+                Full‑Stack Developer
+              </div>{" "}
+              {/* Compact title for tiny screens */}
+            </div>
+          </div>
+
+          <nav className="items-center hidden gap-4 md:flex">
+            {navItems.map((item) => (
+              <button
+                key={item.section}
+                onClick={() => setActive(item.section)}
+                className={`text-sm transition-colors ${
+                  active === item.section
+                    ? "font-bold text-amber-500"
+                    : "text-slate-500 hover:text-slate-900 dark:hover:text-slate-100"
+                }`}
+              >
+                {item.label}
+              </button>
+            ))}
+            {/* Desktop Theme Toggle */}
+            <div className="ml-4">
+              <ThemeToggle />
+            </div>
+          </nav>
+
+          <div className="flex items-center gap-3">
+            <a
+              href="#contact"
+              className="items-center hidden gap-2 px-3 py-2 text-sm transition border rounded-md md:inline-flex hover:bg-slate-100 dark:hover:bg-slate-800"
+            >
+              Hire me
+            </a>
+            <div className="md:hidden">
+              <button
+                onClick={() => setActive("menu")}
+                className="p-2 transition border rounded-md dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800"
+              >
+                <Menu className="w-6 h-6" />
+              </button>
+            </div>
+          </div>
+        </header>
+
+        <main className="max-w-6xl p-4 mx-auto sm:p-6">
+          {/* HERO - Image order reversed on mobile (content first, image second) */}
+          {active === "home" && (
+            <section className="grid items-center gap-8 mt-8 md:grid-cols-2">
+              <motion.div
+                initial={{ opacity: 0, x: -12 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5 }}
+                className="order-last md:order-first"
+              >
+                {" "}
+                {/* Content: Last on mobile, First on desktop */}
+                <p className="text-sm font-semibold text-amber-500">
+                  Full‑Stack • Remote • Freelance
+                </p>
+                <h1 className="mt-6 text-4xl font-bold leading-tight sm:text-5xl lg:text-6xl">
+                  Building Digital Experiences That{" "}
+                  <span className="text-transparent bg-gradient-to-r from-amber-500 to-orange-500 bg-clip-text">
+                    Scale & Convert
+                  </span>
+                </h1>
+                <p className="max-w-2xl mt-6 text-lg leading-relaxed text-slate-600 dark:text-slate-300">
+                  Crafting intelligent web solutions that blend cutting edge
+                  technology with exceptional user experiences. Specializing in
+                  AI integration and scalable architectures.
+                </p>
+                <div className="flex flex-wrap gap-3 mt-6">
+                  <a
+                    onClick={() => setActive("projects")}
+                    className="inline-flex items-center gap-2 px-4 py-2 text-white transition rounded-md shadow-lg cursor-pointer bg-amber-500 hover:bg-amber-600 shadow-amber-500/30"
+                  >
+                    See Work
+                  </a>
+                  <a
+                    onClick={() => setActive("contact")}
+                    className="inline-flex items-center gap-2 px-4 py-2 transition border rounded-md cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800"
+                  >
+                    Contact
+                  </a>
+                  <a
+                    href="/resume.pdf" download
+                    className="inline-flex items-center gap-2 px-4 py-2 transition border rounded-md hover:bg-slate-100 dark:hover:bg-slate-800"
+                  >
+                    <Download className="w-4 h-4" />
+                    Resume
+                  </a>
+                </div>
+                <div className="grid max-w-md grid-cols-2 gap-4 mt-8">
+                  <div className="p-4 bg-white border rounded-lg dark:bg-slate-800">
+                    <div className="text-sm text-slate-500">
+                      Years experience
+                    </div>
+                    <div className="text-2xl font-bold">3+</div>
+                  </div>
+                  <div className="p-4 bg-white border rounded-lg dark:bg-slate-800">
+                    <div className="text-sm text-slate-500">Projects</div>
+                    <div className="text-2xl font-bold">10+</div>
+                  </div>
+                </div>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, x: 12 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5 }}
+                className="flex items-center justify-center order-first mb-8 md:order-last md:mb-0"
+              >
+                {" "}
+                {/* Image: First on mobile, Last on desktop */}
+                <div className="w-full max-w-sm overflow-hidden border shadow-lg rounded-2xl dark:border-slate-700">
+                  <img
+                    src="/king.png"
+                    alt="work preview"
+                    className="object-cover w-full h-auto"
+                  />
+                </div>
+              </motion.div>
+            </section>
+          )}
+
+          {/* PROJECTS */}
+          {active === "projects" && (
+            <section id="projects" className="mt-8">
+              <h2 className="mb-6 text-3xl font-bold">Featured Projects</h2>
+              <div className="grid gap-6 md:grid-cols-2">
+                {projects.map((p, i) => (
+                  <ProjectCard key={i} {...p} />
+                ))}
+              </div>
+
+              <div className="mt-12">
+                <h3 className="mb-4 text-2xl font-semibold">
+                  Selected Case Study — Somi Store
+                </h3>
+                <article className="p-6 bg-white border dark:bg-slate-800 dark:border-slate-700 rounded-2xl">
+                  <div className="grid gap-6 md:grid-cols-2">
+                    <div>
+                      <h4 className="text-lg font-semibold text-amber-500">
+                        Problem
+                      </h4>
+                      <p className="text-sm text-slate-600 dark:text-slate-300">
+                        Client needed a scalable eCommerce platform with a
+                        merchant admin dashboard, chat support, and AI insights
+                        to help product sales, recommendations and business
+                        reporting.
+                      </p>
+
+                      <h4 className="mt-4 text-lg font-semibold text-amber-500">
+                        My role
+                      </h4>
+                      <p className="text-sm text-slate-600 dark:text-slate-300">
+                        Sole developer — architected frontend and backend, built
+                        APIs, designed DB, and implemented AI integrations.
+                      </p>
+
+                      <h4 className="mt-4 text-lg font-semibold text-amber-500">
+                        Key technical highlights
+                      </h4>
+                      <ul className="mt-2 ml-5 space-y-1 text-sm list-disc text-slate-600 dark:text-slate-300">
+                        <li>
+                          React + Inertia.js frontend with reusable components
+                        </li>
+                        <li>
+                          Laravel REST APIs, Eloquent models, and migrations
+                        </li>
+                        <li>
+                          Product upload options (image URL + file upload) with
+                          FormData and Axios
+                        </li>
+                        <li>Protected routes and role-based access</li>
+                        <li>
+                          Admin message sidebar that receives customer messages
+                          and sends replies
+                        </li>
+                      </ul>
+                    </div>
+                    <div>
+                      <div className="w-full h-48 mb-3 overflow-hidden rounded-lg bg-slate-100 dark:bg-slate-700">
+                        <img
+                          src="/somistore.png"
+                          alt="somi"
+                          className="object-cover w-full h-full"
+                        />
+                      </div>
+
+                      <div className="flex flex-wrap gap-2">
+                        <a
+                          href="https://somistore.com.ng/"
+                          className="px-3 py-2 text-sm transition border rounded-md hover:bg-slate-100 dark:hover:bg-slate-700"
+                        >
+                          Live site
+                        </a>
+                        <a
+                          href="#"
+                          className="px-3 py-2 hidden text-sm transition border rounded-md hover:bg-slate-100 dark:hover:bg-slate-700"
+                        >
+                          Read architecture
+                        </a>
+                        <a
+                          href="#"
+                          className="px-3 hidden py-2 text-sm transition border rounded-md hover:bg-slate-100 dark:hover:bg-slate-700"
+                        >
+                          See code
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </article>
+              </div>
+            </section>
+          )}
+
+          {/* ABOUT */}
+          {active === "about" && (
+            <section className="grid gap-6 mt-8 md:grid-cols-3">
+              <div className="p-6 bg-white border md:col-span-2 dark:bg-slate-800 rounded-2xl">
+                <h2 className="text-3xl font-bold">About Me</h2>
+                <p className="mt-3 text-base text-slate-600 dark:text-slate-300">
+                  I’m Kelvin — a Full‑Stack developer focused on building
+                  maintainable web products that ship quickly and scale. My
+                  preferred stack is React for UI, Laravel for backend, and
+                  MySQL for data storage. I enjoy implementing AI features and
+                  building admin tools that make operations safe and repeatable.
+                </p>
+
+                <h3 className="mt-6 text-lg font-bold text-amber-500">
+                  Skills & Tools
+                </h3>
+                <div className="grid grid-cols-2 gap-3 mt-3 sm:grid-cols-3">
+                  {[
+                    "React",
+                    "Inertia.js",
+                    "JavaScript/TypeScript",
+                    "PHP/Laravel",
+                    "MySQL/phpMyAdmin",
+                    "Tailwind CSS",
+                    "Framer Motion",
+                    "Axios/FormData",
+                    "Authentication",
+                    "Git",
+                  ].map((s, i) => (
+                    <div
+                      key={i}
+                      className="px-3 py-2 text-sm border rounded-lg bg-slate-50 dark:bg-slate-700/50"
+                    >
+                      {s}
+                    </div>
+                  ))}
+                </div>
+
+                <h3 className="mt-6 text-lg font-bold text-amber-500">
+                  Experience Highlights
+                </h3>
+                <ul className="mt-2 ml-5 space-y-1 text-base list-disc text-slate-600 dark:text-slate-300">
+                  <li>
+                    Built and maintained Somi Store — full eCommerce with admin
+                    dashboard, AI insight and messaging.
+                  </li>
+                  <li>
+                    Developed SamsanHub — eCommerce platform with API
+                    integrations.
+                  </li>
+                  <li>
+                    Delivered mobile debugging and builds using Expo / React
+                    Native.
+                  </li>
+                </ul>
+              </div>
+
+              <aside className="p-6 bg-white border dark:bg-slate-800 rounded-2xl">
+                <h4 className="text-lg font-bold">Connect</h4>
+                <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+                  Available for remote roles and freelance. Prefer
+                  Node/React/Laravel full‑stack work.
+                </p>
+                <div className="flex flex-col gap-2 mt-4">
+                  <a
+                    href="mailto:kelvin.5williams5@gmail.com"
+                    className="inline-flex items-center gap-2 px-3 py-2 text-sm transition border rounded-md hover:bg-slate-100 dark:hover:bg-slate-700"
+                  >
+                    <Mail className="w-4 h-4" /> Email
+                  </a>
+                  <a
+                    href="https://github.com/kelvsoft"
+                    className="inline-flex items-center gap-2 px-3 py-2 text-sm transition border rounded-md hover:bg-slate-100 dark:hover:bg-slate-700"
+                  >
+                    <Github className="w-4 h-4" /> GitHub
+                  </a>
+                  <a
+                    href="/resume.pdf" download
+                    className="inline-flex items-center gap-2 px-3 py-2 text-sm transition border rounded-md hover:bg-slate-100 dark:hover:bg-slate-700"
+                  >
+                    <Download className="w-4 h-4" /> Resume
+                  </a>
+                </div>
+              </aside>
+            </section>
+          )}
+
+          {/* CONTACT */}
+          {active === "contact" && (
+            <section id="contact" className="grid gap-6 mt-8 md:grid-cols-2">
+              <div className="p-6 bg-white border dark:bg-slate-800 rounded-2xl">
+                <h2 className="text-3xl font-bold">Get in touch</h2>
+                <p className="mt-2 text-base text-slate-600 dark:text-slate-300">
+                  Tell me about your project — timeline, budget, and what you
+                  need built.
+                </p>
+
+                {/* CONTACT FORM */}
+                <form
+                  id="contactForm"
+                  className="grid gap-3 mt-4"
+                  onSubmit={(e) => e.preventDefault()}
+                >
+                  <input
+                    name="name"
+                    placeholder="Your name"
+                    value={form.name}
+                    onChange={updateForm}
+                    className="p-3 bg-transparent border rounded-lg outline-none dark:border-slate-700 focus:ring-2 focus:ring-amber-500"
+                  />
+
+                  <input
+                    name="email"
+                    placeholder="Email"
+                    type="email"
+                    value={form.email}
+                    onChange={updateForm}
+                    className="p-3 bg-transparent border rounded-lg outline-none dark:border-slate-700 focus:ring-2 focus:ring-amber-500"
+                  />
+
+                  <input
+                    name="subject"
+                    placeholder="Subject"
+                    value={form.subject}
+                    onChange={updateForm}
+                    className="p-3 bg-transparent border rounded-lg outline-none dark:border-slate-700 focus:ring-2 focus:ring-amber-500"
+                  />
+
+                  <textarea
+                    name="message"
+                    placeholder="Message"
+                    rows={5}
+                    value={form.message}
+                    onChange={updateForm}
+                    className="p-3 bg-transparent border rounded-lg outline-none dark:border-slate-700 focus:ring-2 focus:ring-amber-500"
+                  />
+
+                  {/* THIS IS THE ACTUAL FILE INPUT (HIDDEN) */}
+                  <input
+                    type="file"
+                    name="attachment"
+                    id="fileInput"
+                    className="hidden"
+                  />
+
+                  <div className="flex gap-3 pt-2">
+                    <button
+                      type="button"
+                      onClick={sendMessage}
+                      className="px-5 py-3 font-semibold text-white transition rounded-lg bg-amber-500 hover:bg-amber-600"
+                    >
+                      Send message
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() =>
+                        document.getElementById("fileInput").click()
+                      }
+                      className="px-5 py-3 transition border rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700"
+                    >
+                      Attach file
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+              <div className="p-6 bg-white border dark:bg-slate-800 rounded-2xl">
+                <h3 className="text-xl font-bold">Quick links & Feedback</h3>
+                <ul className="mt-3 space-y-2 text-base text-slate-600 dark:text-slate-300">
+                  <li>
+                    <a
+                      onClick={() => setActive("projects")}
+                      className="underline cursor-pointer"
+                    >
+                      Featured projects
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/resume.pdf" download className="underline">
+                      Download resume
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      onClick={() => setActive("contact")}
+                      className="underline"
+                    >
+                      Hire me — rates & availability
+                    </a>
+                  </li>
+                </ul>
+
+                <div className="mt-6">
+                  <h4 className="text-lg font-semibold text-amber-500">
+                    Testimonials
+                  </h4>
+                  <div className="mt-3 space-y-3">
+                    {testimonials.map((t, i) => (
+                      <div
+                        key={i}
+                        className="p-4 text-sm border rounded-lg bg-slate-50 dark:bg-slate-700/50"
+                      >
+                        <div className="italic text-slate-700 dark:text-slate-200">
+                          “{t.quote}”
+                        </div>
+                        <div className="mt-2 text-xs font-semibold text-slate-500 dark:text-slate-400">
+                          — {t.author}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </section>
+          )}
+
+          {/* simple footer / resume */}
+          <section id="resume" className="mt-12 mb-24">
+            <div className="p-6 bg-white border dark:bg-slate-800 rounded-2xl">
+              <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+                <div>
+                  <h4 className="text-lg font-semibold">
+                    Download Resume (PDF)
+                  </h4>
+                  <p className="text-sm text-slate-600 dark:text-slate-300">
+                    PDF with projects, experience, and contact details —
+                    optimized for recruiters.
+                  </p>
+                </div>
+                <div className="flex flex-shrink-0 gap-3">
+                  <a
+                    href="/resume.pdf" download
+                    className="inline-flex items-center gap-2 px-4 py-2 transition border rounded-md hover:bg-slate-100 dark:hover:bg-slate-700"
+                  >
+                    <Download className="w-4 h-4" />
+                    Download
+                  </a>
+                  <a
+                    onClick={() => setActive("contact")}
+                    className="inline-flex items-center gap-2 px-4 py-2 transition border rounded-md cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-700"
+                  >
+                    <Briefcase className="w-4 h-4" />
+                    Hire me
+                  </a>
+                </div>
+              </div>
+            </div>
+          </section>
+        </main>
+
+        <footer className="py-6 border-t dark:border-slate-700">
+          <div className="flex flex-col items-center justify-between max-w-6xl gap-4 p-4 mx-auto sm:p-6 sm:flex-row">
+            <div className="text-sm text-center sm:text-left">
+              © {new Date().getFullYear()} Kelvin Williams — Remote Full‑Stack
+              Developer
+            </div>
+            <div className="flex gap-3">
+              <a
+                href="https://github.com/kelvsoft"
+                aria-label="https://github.com/kelvsoft"
+                className="transition text-slate-500 hover:text-slate-900 dark:hover:text-slate-100"
+              >
+                <Github />
+              </a>
+              <a
+                href="mailto:kelvin.5williams5@gmail.com"
+                aria-label="Email"
+                className="transition text-slate-500 hover:text-slate-900 dark:hover:text-slate-100"
+              >
+                <Mail />
+              </a>
+              <a
+                href="#"
+                aria-label="Website"
+                className="transition text-slate-500 hover:text-slate-900 dark:hover:text-slate-100"
+              >
+                <Globe />
+              </a>
+            </div>
+          </div>
+        </footer>
+      </div>
+
+      {/* GLOBAL MODAL */}
+      {modal.open && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-[999] flex items-center justify-center bg-black/50 backdrop-blur-sm"
+        >
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.25 }}
+            className="w-[90%] max-w-sm p-6 text-center bg-white dark:bg-slate-800 rounded-xl shadow-xl"
+          >
+            {/* Success or Error Icon */}
+            <div className="flex justify-center mb-3">
+              {modal.type === "success" ? (
+                <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center text-green-600">
+                  ✓
+                </div>
+              ) : (
+                <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center text-red-600">
+                  ⚠
+                </div>
+              )}
+            </div>
+
+            <h3
+              className={`text-lg font-semibold ${
+                modal.type === "success" ? "text-green-600" : "text-red-600"
+              }`}
+            >
+              {modal.type === "success" ? "Success" : "Error"}
+            </h3>
+
+            <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+              {modal.message}
+            </p>
+
+            <button
+              onClick={() =>
+                setModal({ open: false, type: "success", message: "" })
+              }
+              className="w-full px-4 py-2 mt-4 font-medium text-white transition rounded-lg bg-amber-500 hover:bg-amber-600"
+            >
+              Close
+            </button>
+          </motion.div>
+        </motion.div>
+      )}
+    </div>
+  );
+}
