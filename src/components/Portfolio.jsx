@@ -271,20 +271,19 @@ export default function Portfolio() {
       img: "https://placehold.co/1200x800/eab308/ffffff?text=SamsanHub+Platform",
       actions: [{ label: "Live Site", href: "https://samsanhub.com/" }],
     },
-    //coming soon project
-    // {
-    //   title: "Real-Time Enterprise Messaging Engine",
-    //   subtitle:
-    //     "Architecture Concept: Multi-channel support with automated fallback logic",
-    //   bullets: [
-    //     "Proposed high-concurrency sidebar interface for administrative customer relations management.",
-    //     "Engineered database schema for message persistence with integrated SMTP/Mailgun failover protocols.",
-    //     "Designed security protocols to maintain support access for deactivated or restricted user accounts.",
-    //   ],
-    //   tags: ["Planned", "WebSockets", "System Design"],
-    //   img: "https://placehold.co/1200x800/0ea5e9/ffffff?text=System+Architecture+In-Progress",
-    //   actions: [{ label: "Architecture Specs", href: "#" }], 
-    // },
+    {
+      title: "Real-Time Enterprise Messaging Engine",
+      subtitle:
+        "Architecture Concept: Multi-channel support with automated fallback logic",
+      bullets: [
+        "Proposed high-concurrency sidebar interface for administrative customer relations management.",
+        "Engineered database schema for message persistence with integrated SMTP/Mailgun failover protocols.",
+        "Designed security protocols to maintain support access for deactivated or restricted user accounts.",
+      ],
+      tags: ["Planned", "WebSockets", "System Design"],
+      img: "https://placehold.co/1200x800/0ea5e9/ffffff?text=System+Architecture+In-Progress",
+      actions: [{ label: "Architecture Specs", href: "#" }], 
+    },
     {
       title: "Crypto Limit Order Matching Engine",
       subtitle:
