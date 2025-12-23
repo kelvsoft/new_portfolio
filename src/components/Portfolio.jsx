@@ -166,7 +166,8 @@ export default function Portfolio() {
   // --- State and Handlers (Must be inside the component) ---
   const [active, setActive] = useState("home"); // home, projects, about, contact, menu
 
-const closeMenu = () => setActive(prev => (prev === "menu" ? "home" : prev));
+  const closeMenu = () =>
+    setActive((prev) => (prev === "menu" ? "home" : prev));
 
   //modal pop up
   const [modal, setModal] = useState({
@@ -189,52 +190,51 @@ const closeMenu = () => setActive(prev => (prev === "menu" ? "home" : prev));
 
   //emailjs send message
   const sendMessage = async () => {
-  const formElement = document.getElementById("contactForm");
+    const formElement = document.getElementById("contactForm");
 
-  if (!form.name || !form.email || !form.subject || !form.message) {
-    setModal({
-      open: true,
-      type: "error",
-      message: "Please fill in all fields.",
-    });
-    return;
-  }
+    if (!form.name || !form.email || !form.subject || !form.message) {
+      setModal({
+        open: true,
+        type: "error",
+        message: "Please fill in all fields.",
+      });
+      return;
+    }
 
-  try {
-    await emailjs.sendForm(
-      "service_00ob5gy",
-      "template_43a2v48",
-      formElement,
-      "upIOKRCIyKLUApGIc"
-    );
+    try {
+      await emailjs.sendForm(
+        "service_00ob5gy",
+        "template_43a2v48",
+        formElement,
+        "upIOKRCIyKLUApGIc"
+      );
 
-    setModal({
-      open: true,
-      type: "success",
-      message: "Your message and file have been sent!",
-    });
+      setModal({
+        open: true,
+        type: "success",
+        message: "Your message and file have been sent!",
+      });
 
-    // Clear state
-    setForm({
-      name: "",
-      email: "",
-      subject: "",
-      message: "",
-    });
+      // Clear state
+      setForm({
+        name: "",
+        email: "",
+        subject: "",
+        message: "",
+      });
 
-    // Clear file input
-    document.getElementById("fileInput").value = "";
-  } catch (error) {
-    console.log(error);
+      // Clear file input
+      document.getElementById("fileInput").value = "";
+    } catch (error) {
+      console.log(error);
 
-    setModal({
-      open: true,
-      type: "error",
-      message: "Failed to send message. Try again.",
-    });
-  }
-};
-
+      setModal({
+        open: true,
+        type: "error",
+        message: "Failed to send message. Try again.",
+      });
+    }
+  };
 
   // --- Data Definitions ---
   const navItems = [
@@ -246,43 +246,62 @@ const closeMenu = () => setActive(prev => (prev === "menu" ? "home" : prev));
 
   const projects = [
     {
-      title: "Somi Store — Full eCommerce Platform",
+      title: "SomiStore — Full E-Commerce Ecosystem",
       subtitle:
-        "React + Laravel | Admin Dashboard | Payments | Chat Support | AI Insights",
+        "Enterprise-grade retail platform with AI-driven analytics and real-time support",
       bullets: [
-        "Product management (image URL + file upload), categories & subcategories",
-        "Admin dashboard with refresh trigger and order management",
-        "Custom support chat with admin sidebar and message persistence",
-        "AI Insight menu for merchants & customers",
+        "Engineered a comprehensive inventory engine supporting dynamic categories, subcategories, and automated cloud-based media management.",
+        "Developed a robust Admin Dashboard with real-time state synchronization, enabling seamless order fulfillment and merchant oversight.",
+        "Integrated a persistent live-chat support system with administrative routing and automated email failovers.",
+        "Implemented proprietary AI Insights for predictive merchant analytics and personalized customer experiences.",
       ],
-      tags: ["React", "Laravel", "MySQL", "AI"],
-      img: "https://placehold.co/1200x800/22c55e/ffffff?text=E-Commerce+Demo",
-      actions: [
-        { label: "Live Demo", href: "https://somistore.com.ng/" },
-      ],
+      tags: ["E-Commerce", "Full-Stack", "Inertia.js", "AI Analytics"],
+      img: "https://placehold.co/1200x800/22c55e/ffffff?text=SomiStore+Platform",
+      actions: [{ label: "Live Site", href: "https://somistore.com.ng/" }],
     },
     {
       title: "SamsanHub — AI Insight Platform",
-      subtitle: "AI-driven insights, content generation, and API integrations",
+      subtitle: "AI-driven content generation and secure API orchestration",
       bullets: [
-        "Built reusable AI insight components and server-side integrations",
-        "Role-based access control and secure Laravel APIs",
-        "Polished responsive UI using React and Tailwind",
+        "Architected reusable AI-integration components for automated content generation and data-driven insights.",
+        "Engineered robust Role-Based Access Control (RBAC) and secure RESTful APIs to manage multi-tenant user permissions.",
+        "Crafted a high-performance, responsive UI using HTML and Tailwind CSS, optimized for cross-platform usability.",
       ],
-      tags: ["HTML", "PHP", "APIs"],
-      img: "https://placehold.co/1200x800/eab308/ffffff?text=AI+Insights+Demo",
-      actions: [{ label: "Live Demo", href: "https://samsanhub.com/" }],
+      tags: ["AI Integration", "Laravel", "React", "Cloud Architecture"],
+      img: "https://placehold.co/1200x800/eab308/ffffff?text=SamsanHub+Platform",
+      actions: [{ label: "Live Site", href: "https://samsanhub.com/" }],
     },
+    //coming soon project
+    // {
+    //   title: "Real-Time Enterprise Messaging Engine",
+    //   subtitle:
+    //     "Architecture Concept: Multi-channel support with automated fallback logic",
+    //   bullets: [
+    //     "Proposed high-concurrency sidebar interface for administrative customer relations management.",
+    //     "Engineered database schema for message persistence with integrated SMTP/Mailgun failover protocols.",
+    //     "Designed security protocols to maintain support access for deactivated or restricted user accounts.",
+    //   ],
+    //   tags: ["Planned", "WebSockets", "System Design"],
+    //   img: "https://placehold.co/1200x800/0ea5e9/ffffff?text=System+Architecture+In-Progress",
+    //   actions: [{ label: "Architecture Specs", href: "#" }], 
+    // },
     {
-      title: "Chat & Messaging System",
-      subtitle: "Real-time chat integrated into admin dashboard",
+      title: "Crypto Limit Order Matching Engine",
+      subtitle:
+        "High-concurrency trading engine with real-time liquidity updates",
       bullets: [
-        "Sidebar message interface for admin to respond to customers",
-        "Messages persist in DB and email fallback option",
-        "Access to contact page retained for deactivated users",
+        "Engineered a high-performance matching engine using Laravel 12 and MySQL atomic transactions to ensure 100% data integrity during trade execution.",
+        "Architected real-time order book synchronization using WebSockets (Pusher) and Laravel Echo, providing a zero-latency trading experience.",
+        "Developed concurrency-safe balance management logic using row-level locking (lockForUpdate) to prevent race conditions in multi-user environments.",
       ],
-      tags: ["Socket/Realtime", "UX"],
-      img: "https://placehold.co/1200x800/0ea5e9/ffffff?text=Chat+System+Demo",
+      tags: ["Financial Engineering", "WebSockets", "Laravel 12", "Vue 3"],
+      img: "https://placehold.co/1200x800/0ea5e9/ffffff?text=Exchange+Engine+Demo",
+      actions: [
+        {
+          label: "View Source",
+          href: "https://github.com/kelvsoft/limit-order-exchange",
+        },
+      ],
     },
   ];
 
@@ -409,7 +428,8 @@ const closeMenu = () => setActive(prev => (prev === "menu" ? "home" : prev));
                     Contact
                   </a>
                   <a
-                    href="/resume.pdf" download
+                    href="/resume.pdf"
+                    download
                     className="inline-flex items-center gap-2 px-4 py-2 transition border rounded-md hover:bg-slate-100 dark:hover:bg-slate-800"
                   >
                     <Download className="w-4 h-4" />
@@ -618,7 +638,8 @@ const closeMenu = () => setActive(prev => (prev === "menu" ? "home" : prev));
                     <Github className="w-4 h-4" /> GitHub
                   </a>
                   <a
-                    href="/resume.pdf" download
+                    href="/resume.pdf"
+                    download
                     className="inline-flex items-center gap-2 px-3 py-2 text-sm transition border rounded-md hover:bg-slate-100 dark:hover:bg-slate-700"
                   >
                     <Download className="w-4 h-4" /> Resume
@@ -773,7 +794,8 @@ const closeMenu = () => setActive(prev => (prev === "menu" ? "home" : prev));
                 </div>
                 <div className="flex flex-shrink-0 gap-3">
                   <a
-                    href="/resume.pdf" download
+                    href="/resume.pdf"
+                    download
                     className="inline-flex items-center gap-2 px-4 py-2 transition border rounded-md hover:bg-slate-100 dark:hover:bg-slate-700"
                   >
                     <Download className="w-4 h-4" />
