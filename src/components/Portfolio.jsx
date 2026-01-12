@@ -61,6 +61,13 @@ const ProjectCard = ({
     transition={{ duration: 0.35 }}
     className="flex flex-col p-6 bg-white border shadow dark:bg-slate-800 dark:border-slate-700 rounded-2xl"
   >
+    <div className="w-full h-48 mb-4 overflow-hidden rounded-xl bg-slate-100 dark:bg-slate-900 border dark:border-slate-700">
+      <img
+        src={img} // ...and being called HERE
+        alt={title}
+        className="object-cover w-full h-full hover:scale-105 transition-transform duration-500"
+      />
+    </div>
     <div className="flex flex-col items-start gap-4 sm:flex-row">
       <div className="flex-1 w-full">
         <h3 className="text-lg font-semibold">{title}</h3>
@@ -256,33 +263,40 @@ export default function Portfolio() {
         "Implemented proprietary AI Insights for predictive merchant analytics and personalized customer experiences.",
       ],
       tags: ["E-Commerce", "Full-Stack", "Inertia.js", "AI Analytics"],
-      img: "https://placehold.co/1200x800/22c55e/ffffff?text=SomiStore+Platform",
+      img: "/somistore.png",
       actions: [{ label: "Live Site", href: "https://somistore.com.ng/" }],
     },
     {
-      title: "SamsanHub — AI Insight Platform",
-      subtitle: "AI-driven content generation and secure API orchestration",
+      title: "SamsanHub — AI-Driven E-Commerce",
+      subtitle: "Modernizing retail architecture with Laravel 12 and React",
       bullets: [
-        "Architected reusable AI-integration components for automated content generation and data-driven insights.",
-        "Engineered robust Role-Based Access Control (RBAC) and secure RESTful APIs to manage multi-tenant user permissions.",
-        "Crafted a high-performance, responsive UI using HTML and Tailwind CSS, optimized for cross-platform usability.",
+        "Migrating legacy PHP architecture to a high-performance Laravel 12 & React (Inertia.js) stack.",
+        "Developing an AI-powered Admin Dashboard to automate inventory categorization and merchant reporting.",
+        "Architecting secure RESTful APIs for real-time data orchestration and future AI content generation.",
+        "Refactoring UI components with Tailwind CSS for a seamless, mobile-first shopping experience.",
       ],
-      tags: ["AI Integration", "Laravel", "React", "Cloud Architecture"],
-      img: "https://placehold.co/1200x800/eab308/ffffff?text=SamsanHub+Platform",
-      actions: [{ label: "Live Site", href: "https://samsanhub.com/" }],
+      tags: ["Laravel 12", "React", "AI Integration", "Digital Transformation"],
+      img: "/samsanhub.png",
+      actions: [{ label: "Visit Site", href: "https://samsanhub.com/" }],
     },
     {
-      title: "Real-Time Enterprise Messaging Engine",
+      title: "EchoStream: Enterprise Messaging Engine",
       subtitle:
-        "Architecture Concept: Multi-channel support with automated fallback logic",
+        "Real-time communication suite built with Laravel 12, React, and Reverb WebSockets",
       bullets: [
-        "Proposed high-concurrency sidebar interface for administrative customer relations management.",
-        "Engineered database schema for message persistence with integrated SMTP/Mailgun failover protocols.",
-        "Designed security protocols to maintain support access for deactivated or restricted user accounts.",
+        "Implemented a high-concurrency sidebar interface with real-time channel filtering and unread count badges.",
+        "Architected message persistence using Eloquent with custom broadcast events for instantaneous UI updates.",
+        "Integrated a global dark mode system with zero-flicker initialization using browser local storage and system preference sync.",
+        "Engineered secure administrative protocols to manage messaging access across various user account states.",
       ],
-      tags: ["Planned", "WebSockets", "System Design"],
-      img: "https://placehold.co/1200x800/0ea5e9/ffffff?text=System+Architecture+In-Progress",
-      actions: [{ label: "Architecture Specs", href: "#" }], 
+      tags: ["Laravel 12", "React", "WebSockets", "Tailwind CSS"],
+      img: "/echostream.png",
+      actions: [
+        {
+          label: "View Source",
+          href: "https://github.com/kelvsoft/EchoStream-Engine",
+        },
+      ],
     },
     {
       title: "Crypto Limit Order Matching Engine",
@@ -294,7 +308,7 @@ export default function Portfolio() {
         "Developed concurrency-safe balance management logic using row-level locking (lockForUpdate) to prevent race conditions in multi-user environments.",
       ],
       tags: ["Financial Engineering", "WebSockets", "Laravel 12", "Vue 3"],
-      img: "https://placehold.co/1200x800/0ea5e9/ffffff?text=Exchange+Engine+Demo",
+      img: "/crypto.png",
       actions: [
         {
           label: "View Source",
@@ -540,18 +554,6 @@ export default function Portfolio() {
                         >
                           Live site
                         </a>
-                        <a
-                          href="#"
-                          className="px-3 py-2 hidden text-sm transition border rounded-md hover:bg-slate-100 dark:hover:bg-slate-700"
-                        >
-                          Read architecture
-                        </a>
-                        <a
-                          href="#"
-                          className="px-3 hidden py-2 text-sm transition border rounded-md hover:bg-slate-100 dark:hover:bg-slate-700"
-                        >
-                          See code
-                        </a>
                       </div>
                     </div>
                   </div>
@@ -580,14 +582,18 @@ export default function Portfolio() {
                   {[
                     "React",
                     "Inertia.js",
-                    "JavaScript/TypeScript",
-                    "PHP/Laravel",
-                    "MySQL/phpMyAdmin",
+                    "PHP / Laravel 12", 
+                    "Node.js",
+                    "Vue.js",
+                    "Reverb (WebSockets)",
+                    "AI Integration",
+                    "JavaScript / TypeScript",
+                    "MySQL (Eloquent/Raw)", 
                     "Tailwind CSS",
                     "Framer Motion",
-                    "Axios/FormData",
-                    "Authentication",
-                    "Git",
+                    "Axios / FormData",
+                    "Authentication (Breeze/Sanctum)", 
+                    "Git / GitHub",
                   ].map((s, i) => (
                     <div
                       key={i}
@@ -601,18 +607,21 @@ export default function Portfolio() {
                 <h3 className="mt-6 text-lg font-bold text-amber-500">
                   Experience Highlights
                 </h3>
-                <ul className="mt-2 ml-5 space-y-1 text-base list-disc text-slate-600 dark:text-slate-300">
+                <ul className="mt-2 ml-5 space-y-2 text-base list-disc text-slate-600 dark:text-slate-300">
                   <li>
-                    Built and maintained Somi Store — full eCommerce with admin
-                    dashboard, AI insight and messaging.
+                    <strong>Somi Store:</strong> Engineered a full-scale
+                    E-commerce ecosystem featuring a real-time merchant
+                    dashboard, AI-driven product analytics, and automated cloud
+                    media management.
                   </li>
                   <li>
-                    Developed SamsanHub — eCommerce platform with API
-                    integrations.
+                    <strong>EchoStream Engine:</strong> Architected a
+                    high-concurrency messaging suite
                   </li>
                   <li>
-                    Delivered mobile debugging and builds using Expo / React
-                    Native.
+                    <strong>Financial Engineering:</strong> Developed a
+                    high-performance{" "}
+                    <strong>Limit Order Matching Engine</strong>
                   </li>
                 </ul>
               </div>
