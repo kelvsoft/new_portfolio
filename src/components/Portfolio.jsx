@@ -63,7 +63,7 @@ const ProjectCard = ({
   >
     <div className="w-full h-48 mb-4 overflow-hidden rounded-xl bg-slate-100 dark:bg-slate-900 border dark:border-slate-700">
       <img
-        src={img} // ...and being called HERE
+        src={img}
         alt={title}
         className="object-cover w-full h-full hover:scale-105 transition-transform duration-500"
       />
@@ -156,13 +156,15 @@ const MobileMenu = ({ active, closeMenu, navItems, setActive }) => (
           <ThemeToggle />
         </div>
 
-        <a
-          href="#contact"
-          onClick={closeMenu}
-          className="flex items-center justify-center gap-3 p-3 text-lg font-medium text-white transition rounded-xl bg-amber-500 hover:bg-amber-600"
+        <button
+          onClick={() => {
+            setActive("contact"); 
+            closeMenu();
+          }}
+          className="flex items-center justify-center gap-3 p-3 text-lg font-medium text-white transition rounded-xl bg-amber-500 hover:bg-amber-600 w-full"
         >
           Hire me
-        </a>
+        </button>
       </div>
     </div>
   </motion.div>
@@ -582,17 +584,17 @@ export default function Portfolio() {
                   {[
                     "React",
                     "Inertia.js",
-                    "PHP / Laravel 12", 
+                    "PHP / Laravel 12",
                     "Node.js",
                     "Vue.js",
                     "Reverb (WebSockets)",
                     "AI Integration",
                     "JavaScript / TypeScript",
-                    "MySQL (Eloquent/Raw)", 
+                    "MySQL (Eloquent/Raw)",
                     "Tailwind CSS",
                     "Framer Motion",
                     "Axios / FormData",
-                    "Authentication (Breeze/Sanctum)", 
+                    "Authentication (Breeze/Sanctum)",
                     "Git / GitHub",
                   ].map((s, i) => (
                     <div
@@ -751,14 +753,6 @@ export default function Portfolio() {
                   <li>
                     <a href="/resume.pdf" download className="underline">
                       Download resume
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      onClick={() => setActive("contact")}
-                      className="underline"
-                    >
-                      Hire me — rates & availability
                     </a>
                   </li>
                 </ul>
