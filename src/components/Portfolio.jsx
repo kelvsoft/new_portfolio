@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import kingImage from "/src/assets/king.jpg";
 // eslint-disable-next-line no-unused-vars
 import emailjs from "emailjs-com";
 import { motion } from "framer-motion";
@@ -158,7 +159,7 @@ const MobileMenu = ({ active, closeMenu, navItems, setActive }) => (
 
         <button
           onClick={() => {
-            setActive("contact"); 
+            setActive("contact");
             closeMenu();
           }}
           className="flex items-center justify-center gap-3 p-3 text-lg font-medium text-white transition rounded-xl bg-amber-500 hover:bg-amber-600 w-full"
@@ -215,7 +216,7 @@ export default function Portfolio() {
         "service_00ob5gy",
         "template_43a2v48",
         formElement,
-        "upIOKRCIyKLUApGIc"
+        "upIOKRCIyKLUApGIc",
       );
 
       setModal({
@@ -475,8 +476,10 @@ export default function Portfolio() {
                 {/* Image: First on mobile, Last on desktop */}
                 <div className="w-full max-w-sm overflow-hidden border shadow-lg rounded-2xl dark:border-slate-700">
                   <img
-                    src="/king.png"
-                    alt="work preview"
+                    src={kingImage}
+                    alt="Kings-tech Portfolio Preview"
+                    loading="lazy"
+                    decoding="async"
                     className="object-cover w-full h-auto"
                   />
                 </div>
